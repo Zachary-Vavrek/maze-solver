@@ -4,6 +4,7 @@
 # Hi code archaeologists.
 
 from tkinter import Tk, BOTH, Canvas
+import time
 
 
 
@@ -143,9 +144,45 @@ class Maze:
         self._cell_size_y = cell_size_y # Vertical size of cells
         self._create_cells()            # Lastly a call to create these cells.
     
+    # Start with an empty list.  At each spot, append a new empty list and then
+    # go into that new list, start filling it with cells.
     def _create_cells(self):
-        return
+        self._cells = []
+        for i in range(self._num_cols):
+            self._cells.append([])
+            for j in range(self._num_rows):
+                # This now requires calculating the right cell x & y coords.
+                # Do corners overlap?  I'm going to let corners overlap.
+                # So there's horizontal buffer (x1), plus the product of 
+                # number of cells so far (i) and cell width (cell_size_x).
+                # Same deal for vertical, except y1, j, cell_size_y.  That gets
+                # the first (top-left) corner.  Why's it x1, x2, y1, y2, not 
+                # x1, y1, x2, y2?  Latter's easier.  Whatever, worry later.
+                # Cell(win, x1+(cellsizex * i), x1+(cellsizex * (i+1))) etc.
+                self._cells[i].append(Cell(
+                    self._win,
+                    self._x1 + self._cell_size_x * (i),
+                    self._x1 + self._cell_size_x * (i+1),
+                    self._y1 + self._cell_size_y * (j),
+                    self._y1 + self._cell_size_y * (j+1),
+                ))
+        for i in range(self._num_cols):
+            for j in range(self._num_rows):
+                # I don't feel like this should be a separate loop but the
+                # guide is kind of implying it should happen after I the prior
+                # loop is done.  (Guide doesn't really imply loops, that's me.)
+                # Try it one way, then the other.
+                self._draw_cell(i,j)
 
+    def _draw_cell(self, i, j):
+        # Wait a minute a lot of what this function is supposed to do is
+        # done already.  Unclear what's supposed to be going where here.
+        self._cells[i][j].draw()
+        self._animate()
+
+    def _animate(self):
+        self._win.redraw()
+        time.sleep(0.05)
 
 def main():
     win = Window(800, 600)
@@ -157,13 +194,15 @@ def main():
     # lowline = Line(point2, point3)
     # win.draw_line(lowline)
     # win.draw_line(diag1,"red")
-    cell1 = Cell(win,5,105,5,105)
-    cell2 = Cell(win,50,200,75,300)
-    cell3 = Cell(win,400,450,400,450, False)
-    win.draw_cell(cell1)
-    win.draw_cell(cell2, "red")
-    win.draw_cell(cell3)
-    cell1.draw_move(cell2)
+    # cell1 = Cell(win,5,105,5,105)
+    # cell2 = Cell(win,50,200,75,300)
+    # cell3 = Cell(win,400,450,400,450, False)
+    # win.draw_cell(cell1)
+    # win.draw_cell(cell2, "red")
+    # win.draw_cell(cell3)
+    # cell1.draw_move(cell2)
+
+    test= Maze(win,5,5, 10,10, 50,50)
     
     win.wait_for_close()
 
