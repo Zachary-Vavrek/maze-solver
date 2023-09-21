@@ -17,6 +17,7 @@ class Cell:
         self._y1 = None
         self._y2 = None
         self._win = win
+        self.visited = False
 
     # Just such a strong feeling of "I don't like how this is being done here,
     # but I don't think it matters that much."  I'd rather be napping.
@@ -30,18 +31,30 @@ class Cell:
         self._x2 = x2
         self._y1 = y1
         self._y2 = y2
+        # Left
+        line = Line(Point(x1, y1), Point(x1, y2))
         if self.has_left_wall:
-            line = Line(Point(x1, y1), Point(x1, y2))
-            self._win.draw_line(line)
+            self._win.draw_line(line, "black")
+        else:
+            self._win.draw_line(line, "white")
+        # Top
+        line = Line(Point(x1, y1), Point(x2, y1))
         if self.has_top_wall:
-            line = Line(Point(x1, y1), Point(x2, y1))
-            self._win.draw_line(line)
+            self._win.draw_line(line, "black")
+        else:
+            self._win.draw_line(line, "white")
+        # Right
+        line = Line(Point(x2, y1), Point(x2, y2))
         if self.has_right_wall:
-            line = Line(Point(x2, y1), Point(x2, y2))
-            self._win.draw_line(line)
+            self._win.draw_line(line, "black")
+        else:
+            self._win.draw_line(line, "white")
+        # Bottom
+        line = Line(Point(x1, y2), Point(x2, y2))
         if self.has_bottom_wall:
-            line = Line(Point(x1, y2), Point(x2, y2))
-            self._win.draw_line(line)
+            self._win.draw_line(line, "black")
+        else:
+            self._win.draw_line(line, "white")
 
     # But the example's draw_move is ... what?  Why're you doing that, dude?
     def draw_move(self, to_cell, undo=False):
@@ -60,4 +73,3 @@ class Cell:
             fill_color = "gray"
         linemove = Line(start_pt, end_pt)
         self._win.draw_line(linemove, fill_color)
-        

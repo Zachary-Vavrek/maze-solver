@@ -10,7 +10,8 @@ class Window:
         self.__root.title = ("How come it's a house of leaves?")
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
         # I still don't know what the title is used for.
-        self.__canvas = Canvas(self.__root, height=height, width=width)
+        self.__canvas = Canvas(
+            self.__root, bg="white", height=height, width=width)
         self.__canvas.pack(fill=BOTH, expand=1)
         self.__running = False
         # I'm copying and pasting some of this from the project example because
